@@ -1,0 +1,178 @@
+---
+title: "class06"
+author: "Peter Shamasha (A15857589)"
+format: pdf
+---
+
+ > Q1. Write a function grade() to determine an overall grade from a vector of student homework
+assignment scores dropping the lowest single score. If a student misses a homework (i.e. has an
+NA value) this can be used as a score to be potentially dropped. Your final function should be
+adquately explained with code comments and be able to work on an example class gradebook
+such as this one in CSV format: “https://tinyurl.com/gradeinput” [3pts]
+
+```{r}
+# Example input vectors to start with
+student1 <- c(100, 100, 100, 100, 100, 100, 100, 90)
+student2 <- c(100, NA, 90, 90, 90, 90, 97, 80)
+student3 <- c(90, NA, NA, NA, NA, NA, NA, NA)
+
+```
+
+"is.na" us a function that helps us determine which values in the vector is NA
+```{r}
+is.na(student3)
+```
+
+Now that we know which values are NA, we have to change them to 0. In order to do that we can use 'is.na' function within our vector as shown below.
+
+```{r}
+student2[is.na(student2)] <- 0
+student2
+```
+It is now time to use a temp object (we will use x) in order to easily change between the vectors: student1, student2 and student3
+
+
+```{r}
+x <- student3
+x[is.na(x)] <- 0
+x
+```
+
+Now we need to get remove the lowest grade. In order to do that we first need to find the lowest value in the vector. We can do that using 'which.min()' function as shown below
+
+
+```{r}
+x <- student1
+x
+x[which.min(x)]
+```
+
+Now that we can find the lowest grade, we need to remove it from the vector. In order to do that we can use a '-' in the vector as shown below
+```{r}
+x <- student1
+x
+x[-which.min(x)]
+
+```
+Now I need to put this all back together to make our working snippet:
+
+```{r}
+x <- student3
+x
+
+# Map/replace NA values to zero
+x[is.na(x)] <- 0
+
+#Exclude the lowest score and calculate the mean
+mean(x[-which.min(x)])
+```
+Cool! this is my working snippet that I can turn into a function called 'grade()'
+
+All functions in R have at least 3 things
+
+-**Name**, in our case "grade"
+-input **arguments**, student1 etc.
+-**Body**, this is our working snippet
+
+
+```{r}
+grade <- function(x){
+ # Map/replace NA values to zero
+x[is.na(x)] <- 0
+
+#Exclude the lowest score and calculate the mean
+mean(x[-which.min(x)])
+}
+```
+
+Can I use this function now?
+
+```{r}
+grade(student1)
+```
+
+Read a gradebook from online:
+
+```{r}
+hw <- read.csv("https://tinyurl.com/gradeinput", row.names = 1)
+hw
+```
+
+We can use the 'apply()' function to grade all the students in this class with our new 'grade()' function.
+
+The 'apply()' functions allows us to run any function over wither the rows or columns of a data.frame. Let's see how it works:
+
+```{r}
+ans <- apply(hw, 1, grade)
+ans
+#apply(Data, Margin, Function) 
+#margin is the row (1), or column (2)
+```
+
+>Q2. Using your grade() function and the supplied gradebook, Who is the top scoring student
+overall in the gradebook? [3pts]
+
+
+```{r}
+ans[which.max(ans)]
+```
+
+> Q3. From your analysis of the gradebook, which homework was toughest on students (i.e. obtained
+the lowest scores overall? [2pts]
+
+```{r}
+avg.scores <- apply(hw, 2, mean, na.rm=TRUE)
+which.min(avg.scores)
+```
+```{r}
+tot.scores <- apply(hw, 2, sum, na.rm=T)
+which.min(tot.scores)
+```
+
+```{r}
+tot.scores
+avg.scores
+```
+
+> Q4. Optional Extension: From your analysis of the gradebook, which homework was most
+predictive of overall score (i.e. highest correlation with average grade score)? [1pt]
+
+```{r}
+hw$hw1
+```
+
+```{r}
+ans
+```
+
+```{r}
+cor(hw$hw1, ans)
+cor(hw$hw3, ans)
+
+#value between 0 and 1, 1 being highest correlation and 0 being lowest correlation
+```
+
+If I try on hw2 I get NA as there are missing homeworks (i.e. NA values)
+
+```{r}
+hw$hw2
+```
+
+I will mask all NA values to zero.
+
+```{r}
+mask <- hw
+mask[is.na(mask)] <- 0
+mask
+```
+
+```{r}
+cor(mask$hw1, ans)
+```
+
+We can use the 'apply()' function here on the columns of hw (i.e. the individual homeworks) and pass it the overall scores for the class (in my 'ans' object as an extra argument).
+
+```{r}
+apply(mask, 2, cor, y=ans)
+```
+
