@@ -1,0 +1,175 @@
+---
+title: "class08: Machine Learning Mini Project"
+author: "Peter Shamasha (A15857589)"
+format: pdf
+---
+
+# Breast Cancer Project
+
+Today we aer going to explore some data from the University of Wiscosin Cancer Center on Breast biopsy data.
+
+```{r}
+wisc.data <- read.csv("WisconsinCancer.csv", row.names = 1)
+head(wisc.data)
+```
+
+> Q. how many patients samples are in this dataset?
+
+```{r}
+nrow(wisc.data)
+```
+
+There are `r nrow(wisc.data)` patients in thus dataset.
+
+> How many cancer (M) and non cancer (B) samples are there?
+
+```{r}
+table(wisc.data$diagnosis)
+```
+
+Save the diagnosis for later use as a reference to compare how well we do with PCA etc.
+
+```{r}
+diagnosis <- as.factor(wisc.data$diagnosis)
+#diagnosis
+```
+
+
+Now exclude the diagnosis column from the data
+
+```{r}
+wisc <- wisc.data[, -1]
+```
+
+> Q. How many "dimensions", "Variables", "columns" are there in this dataset?
+
+```{r}
+ncol(wisc)
+```
+
+# Principle Component Analysis (PCA)
+
+To perform PCA in R we can use the `prcomp()` function. It takes input as a numeric dataset  and optional `scale=False/True` argument.
+
+We generally always want to set `scale=TRUE` but let's make sure by checking if the mean and standard deviation values are different across these 30 columns.
+
+```{r}
+round( colMeans(wisc) )
+```
+
+```{r}
+pca <- prcomp(wisc, scale=T)
+summary(pca)
+```
+
+```{r}
+attributes(pca)
+```
+
+```{r}
+plot(pca$x[,1], pca$x[,2], col=diagnosis)
+```
+
+```{r}
+library(ggplot2)
+
+x <- as.data.frame(pca$x)
+
+ggplot(x) +
+  aes(PC1, PC2, col=diagnosis) + 
+  geom_point()
+```
+
+
+> How much variance is captured in the top 3 PCs. 
+
+They captured 72.6% of the total variance.
+
+> Q. Q9. For the first principal component, what is the component of the loading vector (i.e. wisc.pr$rotation[,1]) for the feature concave.points_mean? This tells us
+
+```{r}
+pca$rotation["concave.points_mean",1]
+```
+
+```{r}
+attributes(pca)
+```
+
+# Combine PCA results with clustering.
+
+We can use our new PCA variables (i.e. the scores along the PCs contained in it `pca$x`) as input for other methods such as clustering.
+
+```{r}
+# Hclust needs a distance matrix as input
+d <- dist( pca$x[, 1:3] )
+
+hc <- hclust(d, method = "ward.D2")
+plot(hc)
+```
+
+To get our cluster membership vector we can use the `cutree()` function and specify a height (`h`) ot number of groups (`k`).
+
+```{r}
+grps <- cutree(hc, h=80)
+table(grps)
+```
+
+I want to find out how many diagnosis "M" and "B" are in each grp?
+
+```{r}
+table(diagnosis)
+```
+
+```{r}
+table(diagnosis, grps)
+```
+We can also plot our results using our clustering vector `grps`.
+
+```{r}
+plot(pca$x[,1], pca$x[,2], col=grps)
+```
+
+
+```{r}
+ggplot(x) +
+  aes(PC1, PC2, col=grps) + 
+  geom_point()
+```
+
+> Q15. What is the specificty and sensitivity of our current results?
+
+
+```{r}
+(179/(179+33))
+```
+
+The sensitivity of our current results is 0.84 or 84%.
+
+```{r}
+333/(333+24)
+```
+The specificity of our current results is 0.93 or 93%
+
+
+## Prediction
+
+We will use the predict() function that will take our PCA model from before and new cancer cell data and project that data onto our PCA space.
+
+```{r}
+#url <- "new_samples.csv"
+url <- "https://tinyurl.com/new-samples-CSV"
+new <- read.csv(url)
+npc <- predict(pca, newdata=new)
+npc
+```
+
+```{r}
+plot(pca$x[,1:2], col=grps)
+points(npc[,1], npc[,2], col="blue", pch=16, cex=3)
+text(npc[,1], npc[,2], c(1,2), col="white")
+```
+
+> Q18. Which of these new patients should we prioritize for follow up based on your results?
+
+We should prioritize patient 2 for follow up based on our results because his data falls into the cluster of the malignant group.
+
