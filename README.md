@@ -18,3 +18,5 @@ From Class [BIMM143](https://bioboot.github.io/bimm143_S23/schedule/#14)
 - [**Structural Bioinformatics Part 2**](https://github.com/PeterS1228/bimm143/blob/main/class10/class10.pdf) [Source Code](https://github.com/PeterS1228/bimm143/blob/main/class10/class10.qmd)
 
 - [**Candy Analysis Mini-Project**](https://github.com/PeterS1228/bimm143/blob/main/class10.1/class11.pdf) [Source Code](https://github.com/PeterS1228/bimm143/blob/main/class10.1/class11.qmd)
+
+- [**RNAseq Analysis**](https://github.com/PeterS1228/bimm143/blob/main/class12/class12.pdf) [Source Code](https://github.com/PeterS1228/bimm143/blob/main/class12/class12.qmd)
