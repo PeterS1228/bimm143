@@ -13,8 +13,8 @@ From Class [BIMM143](https://bioboot.github.io/bimm143_S23/schedule/#14)
 
 - [**Machine Learning Mini-Project**](https://github.com/PeterS1228/bimm143/blob/main/class08/class08.pdf) [Source Code](https://github.com/PeterS1228/bimm143/blob/main/class08/class08.qmd)
 
--[**Structural Bioinformatics**](https://github.com/PeterS1228/bimm143/blob/main/class09/class09.pdf) [Source Code](https://github.com/PeterS1228/bimm143/blob/main/class09/class09.qmd)
+- [**Structural Bioinformatics**](https://github.com/PeterS1228/bimm143/blob/main/class09/class09.pdf) [Source Code](https://github.com/PeterS1228/bimm143/blob/main/class09/class09.qmd)
 
-[**Structural Bioinformatics Part 2**](https://github.com/PeterS1228/bimm143/blob/main/class10/class10.pdf) [Source Code](https://github.com/PeterS1228/bimm143/blob/main/class10/class10.qmd)
+- [**Structural Bioinformatics Part 2**](https://github.com/PeterS1228/bimm143/blob/main/class10/class10.pdf) [Source Code](https://github.com/PeterS1228/bimm143/blob/main/class10/class10.qmd)
 
-[**Candy Analysis Mini-Project**](https://github.com/PeterS1228/bimm143/blob/main/class10.1/class11.pdf) [Source Code](https://github.com/PeterS1228/bimm143/blob/main/class10.1/class11.qmd)
+- [**Candy Analysis Mini-Project**](https://github.com/PeterS1228/bimm143/blob/main/class10.1/class11.pdf) [Source Code](https://github.com/PeterS1228/bimm143/blob/main/class10.1/class11.qmd)
