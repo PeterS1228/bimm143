@@ -1,7 +1,7 @@
 ---
 title: "Class 05: Data Visualization"
 author: "Peter Shamasha (A15857589)"
-format: pdf
+format: gfm
 ---
 
 ## Base R Graphics vs ggplot2
